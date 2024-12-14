@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  userID      String   @id
+  username    String
+  email       String   @unique
+  password    String
+  phoneNumber Int
+  role        String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  order       Order[]
+}
+
+model Banner {
+  bannerID  String   @id
+  title     String
+  detail    String
+  image     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Product {
+  productID   String        @id
+  // Relation to Category
+  categoryID  String
+  category    Category      @relation(fields: [categoryID], references: [categoryID])
+  name        String
+  detail      String
+  amount      Int
+  price       Int
+  image       String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  orderDetail OrderDetail[]
+}
+
+model Category {
+  categoryID String    @id
+  name       String
+  icon       String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  // Relation to Products
+  products   Product[]
+}
+
+model Order {
+  orderID     String        @id
+  paymentType String
+  totalPrice  Int
+  userID      String
+  user        User          @relation(fields: [userID], references: [userID])
+  address     String
+  bill        String
+  status      String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  orderDetail OrderDetail[]
+}
+
+model OrderDetail {
+  order_detail_ID String   @id
+  orderID         String
+  order           Order    @relation(fields: [orderID], references: [orderID])
+  productID       String
+  product         Product  @relation(fields: [productID], references: [productID])
+  amount          String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
