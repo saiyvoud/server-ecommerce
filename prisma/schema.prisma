@@ -13,7 +13,7 @@ model User {
   email       String   @unique
   password    String
   phoneNumber Int
-  role        String
+  role        String   @default("user")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   order       Order[]
@@ -45,8 +45,7 @@ model Product {
 
 model Category {
   categoryID String    @id
-  name       String
-  icon       String
+  categoryName       String
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
   // Relation to Products
@@ -60,7 +59,7 @@ model Order {
   userID      String
   user        User          @relation(fields: [userID], references: [userID])
   address     String
-  bill        String
+  bill        String?
   status      String
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt

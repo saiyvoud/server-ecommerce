@@ -7,6 +7,7 @@ export const SMessage = {
  SelectBy: "Select By Success",
  Insert: "Insert Success",
  Update: "Update Success",
+ UpdateImage: "Update Image Success",
  Delete: "Delete Success",
  Already: "Already",
  Search: "Search Success",
@@ -22,4 +23,10 @@ export const EMessage = {
  ErrUpdate: "Error Update",
  ErrDelete: "Error Delete",
  ErrUpload: "Error Upload",
+}
+export const StatusOrder = {
+    await: "await",
+    padding: "padding",
+    success: "padding",
+    cancel: "cancel"
 }
