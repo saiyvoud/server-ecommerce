@@ -8,7 +8,16 @@ export default class OrderDetailController {
   static async SelectAll(req, res) {
     try {
       const prisma = new PrismaClient();
-      const orderDetail = await prisma.orderDetail.findMany();
+      const orderDetail = await prisma.orderDetail.findMany({
+        select: {
+          order_detail_ID: true,
+          orderID: true,
+          product: true,
+          amount: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      });
       if (!orderDetail) {
         return SendError(res, 404, EMessage.NotFound, "orderDetail");
       }
@@ -25,6 +34,14 @@ export default class OrderDetailController {
       }
       const prisma = new PrismaClient();
       const orderDetail = await prisma.orderDetail.findFirst({
+        select:{
+          order_detail_ID : true,
+          orderID: true,
+          product: true,
+          amount: true,
+          createdAt: true,
+          updatedAt: true
+         },
         where: { order_detail_ID: order_detail_ID },
       });
       if (!orderDetail) {
@@ -43,6 +60,14 @@ export default class OrderDetailController {
       }
       const prisma = new PrismaClient();
       const orderDetail = await prisma.orderDetail.findMany({
+        select: {
+          order_detail_ID: true,
+          orderID: true,
+          product: true,
+          amount: true,
+          createdAt: true,
+          updatedAt: true,
+        },
         where: { orderID: orderID },
       });
       if (!orderDetail) {
@@ -75,7 +100,7 @@ export default class OrderDetailController {
           order_detail_ID,
           orderID,
           productID,
-          amount,
+          amount: parseInt(amount),
         },
       });
       if (!data) {
@@ -83,6 +108,7 @@ export default class OrderDetailController {
       }
       return SendCreate(res, SMessage.Insert, data);
     } catch (error) {
+      console.log(error);
       return SendError(res, 500, EMessage.ServerInternal, error);
     }
   }
@@ -106,7 +132,7 @@ export default class OrderDetailController {
       const result = await prisma.orderDetail.updateMany({
         where: { order_detail_ID: order_detail_ID },
         data: {
-          amount: amount,
+          amount: parseInt(amount),
         },
       });
       if (!result) {
@@ -114,6 +140,7 @@ export default class OrderDetailController {
       }
       return SendSuccess(res, SMessage.Update, result);
     } catch (error) {
+      console.log(error);
       return SendError(res, 500, EMessage.ServerInternal, error);
     }
   }
@@ -127,14 +154,13 @@ export default class OrderDetailController {
       if (!orderDetail) {
         return SendError(res, 404, EMessage.NotFound, "orderDetail");
       }
-      const deleteOrderDetail = await prisma.orderDetail.delete({
+      const deleteOrderDetail = await prisma.orderDetail.deleteMany({
         where: { order_detail_ID: order_detail_ID },
       });
-      if (deleteOrderDetail) {
-        return SendError(res, 404, EMessage.ErrDelete);
-      }
+   
       return SendSuccess(res, SMessage.Delete, deleteOrderDetail);
     } catch (error) {
+      console.log(error);
       return SendError(res, 500, EMessage.ServerInternal, error);
     }
   }
