@@ -56,6 +56,7 @@ export default class ProductController {
       return SendError(res, 500, EMessage.ServerInternal, error);
     }
   }
+  
   static async SelectAll(req, res) {
     try {
       const prisma = new PrismaClient();
